@@ -1,18 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@200;300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&display=swap');
 
 :root{
     --green:#27ae60;
+    --green-dark:#1e8449;
     --black:#2c2c54;
+    --gradient: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
 }
 
 *{
-    font-family: 'Nunito',sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     outline: none; border: none;
     text-transform: capitalize;text-decoration: none;
-    transition: all .2s linear;
+    transition: all .3s ease;
+}
+
+/* Scroll Reveal Animation */
+.reveal{
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease;
+}
+
+.reveal.active{
+    opacity: 1;
+    transform: translateY(0);
 }
 
 *::selection{
@@ -33,16 +47,44 @@ section{
 .btn{
     display: inline-block;
     margin-top: 1rem;
-    background: var(--green);
+    background: var(--gradient);
     color: #fff;
     padding: .8rem 3rem;
     font-size: 1.7rem;
     text-align: center;
     cursor: pointer;
+    border-radius: 5rem;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: 0.5s;
+    z-index: -1;
+}
+
+.btn:hover::before{
+    left: 100%;
 }
 
 .btn:hover{
     background: var(--black);
+    box-shadow: 0 6px 20px rgba(44, 44, 84, 0.4);
+    transform: translateY(-3px);
+}
+
+.btn:active{
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(44, 44, 84, 0.3);
 }
 .heading{
     text-align: center;
@@ -87,8 +129,15 @@ section{
     padding: 1rem;
     font-size: 2rem;
     color: #333;
-    border: .1 rem solid rgba(0,0,0,.3);
+    border: 2px solid rgba(0,0,0,.1);
     text-transform: none;
+    border-radius: 0.5rem 0 0 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.header-1 .search-box-container #search-box:focus{
+    border-color: var(--green);
+    box-shadow: 0 0 10px rgba(39, 174, 96, 0.2);
 }
 
 .header-1 .search-box-container label{
@@ -114,13 +163,23 @@ section{
     padding: 2rem 9%;
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
     position: relative;
-
 }
 
-.header-2 .active{
+.header-2.sticky{
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 10000;
+    box-shadow: 0 5px 20px rgba(0,0,0,.15);
+    animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown{
+    from{
+        transform: translateY(-100%);
+    }
+    to{
+        transform: translateY(0);
+    }
 }
 
 .header-2 .navbar a{
@@ -128,11 +187,34 @@ section{
     font-size: 2rem;
     border-radius: 5rem;
     color:var(--black);
+    position: relative;
+}
+
+.header-2 .navbar a::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: var(--green);
+    border-radius: 5rem;
+    transition: width 0.3s ease;
+}
+
+.header-2 .navbar a:hover::after,
+.header-2 .navbar a.active::after{
+    width: 70%;
 }
 
 .header-2 .navbar a:hover{
     background: var(--green);
     color: #fff;
+}
+
+.header-2 .navbar a.active{
+    color: var(--green);
 }
 
 .header-2 .icons a{
@@ -169,6 +251,16 @@ section{
 
 .home .image img{
     width: 100%;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%, 100%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-20px);
+    }
 }
 
 .home .content{
@@ -227,7 +319,24 @@ section{
     
 }
 .banner-container .banner:hover img{
- transform: scale(1.2) rotate(-5deg);
+    transform: scale(1.2) rotate(-5deg);
+}
+
+.banner-container .banner::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(39,174,96,0.1) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.banner-container .banner:hover::before{
+    opacity: 1;
 }
 
 .category .box-container{
@@ -237,17 +346,31 @@ section{
 }
 
 .category .box-container .box{
-    border: .1rem solid rgba(0,0,0,.3);
-    border-radius: .5rem;
+    border: .1rem solid rgba(0,0,0,.1);
+    border-radius: 1.5rem;
     text-align: center;
     padding: 2rem;
     flex: 1 1 25rem;
+    background: #fff;
+    box-shadow: 0 5px 20px rgba(0,0,0,.05);
+    transition: all 0.4s ease;
+}
+
+.category .box-container .box:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(39,174,96,.15);
+    border-color: var(--green);
 }
 
 .category .box-container .box img{
     width: 20rem;
     margin: .5rem 0;
     height: 15rem;
+    transition: transform 0.4s ease;
+}
+
+.category .box-container .box:hover img{
+    transform: scale(1.1);
 }
 
 .category .box-container .box h3{
@@ -272,25 +395,49 @@ section{
 }
 
 .product .box-container .box{
-    border: .1rem solid rgba(0,0,0,.3);
-    border-radius: .5rem;
+    border: .1rem solid rgba(0,0,0,.1);
+    border-radius: 1.5rem;
     text-align: center;
     padding: 2rem;
     flex: 1 1 30rem;
     position: relative;
+    background: #fff;
+    box-shadow: 0 5px 20px rgba(0,0,0,.05);
+    overflow: hidden;
+}
+
+.product .box-container .box:hover{
+    box-shadow: 0 15px 40px rgba(39,174,96,.15);
 }
 
 .product .box-container .box img{
     height: 20rem;
+    transition: transform 0.4s ease;
+}
+
+.product .box-container .box:hover img{
+    transform: scale(1.1);
 }
 
 .product .box-container .box .discount{
     position: absolute;
     top: 1rem; left: 1rem;
-    background: rgba(0,255,0,.1);
-    color: var(--green);
-    padding: .7rem 1rem ;
-    font-size: 2rem;
+    background: var(--gradient);
+    color: #fff;
+    padding: .7rem 1.2rem;
+    font-size: 1.8rem;
+    border-radius: 3rem;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%, 100%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(1.1);
+    }
 }
 
 .product .box-container .box .icons{
@@ -317,6 +464,28 @@ section{
 .product .box-container .box .icons a:hover{
     background: var(--green);
     color: #fff;
+    transform: scale(1.1);
+}
+
+.product .box-container .box .icons a.heart-active{
+    background: #e74c3c;
+    color: #fff;
+    animation: heartBeat 0.5s ease;
+}
+
+@keyframes heartBeat{
+    0%, 100%{
+        transform: scale(1);
+    }
+    25%{
+        transform: scale(1.3);
+    }
+    50%{
+        transform: scale(1);
+    }
+    75%{
+        transform: scale(1.2);
+    }
 }
 
 .product .box-container .box h3{
@@ -356,17 +525,55 @@ section{
 }
 
 .product .box-container .box .quantity input{
-    border: .1rem solid rgba(0,0,0,.3);
+    border: none;
     font-size: 1.5rem;
     font-weight: bolder;
     color: var(--black);
     padding: .5rem;
-    background: rgba(0,0,0,.05);
+    background: transparent;
+    width: 5rem;
+    text-align: center;
+}
+
+.product .box-container .box .quantity-controls{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 2px solid rgba(0,0,0,.1);
+    border-radius: 3rem;
+    padding: 0.3rem;
+}
+
+.product .box-container .box .quantity-btn{
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: var(--green);
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.product .box-container .box .quantity-btn:hover{
+    background: var(--black);
+    transform: scale(1.1);
 }
 
 .product .box-container .box .btn{
     display: block;
+}
 
+.product .box-container .box .btn.added{
+    background: var(--black);
+}
+
+.product .box-container .box .btn.added::after{
+    content: ' ✓';
 }
 
 .deal{
@@ -548,10 +755,103 @@ section{
 }
 
 .footer .credit span{
-color: var(--green);
+    color: var(--green);
 }
 
+/* Back to Top Button */
+.back-to-top{
+    position: fixed;
+    bottom: 3rem;
+    right: 3rem;
+    width: 5rem;
+    height: 5rem;
+    background: var(--gradient);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9999;
+    box-shadow: 0 5px 20px rgba(39,174,96,0.4);
+}
 
+.back-to-top:hover{
+    background: var(--black);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(44,44,84,0.4);
+}
+
+.back-to-top.show{
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Loading Animation */
+.loading{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loading.hide{
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading .spinner{
+    width: 5rem;
+    height: 5rem;
+    border: 5px solid rgba(39,174,96,0.2);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+/* Tooltip styles */
+.tooltip{
+    position: relative;
+}
+
+.tooltip::after{
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--black);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.tooltip:hover::after{
+    opacity: 1;
+    visibility: visible;
+}
 
 @media(max-width:1200px){
     html{
@@ -581,8 +881,8 @@ color: var(--green);
         display: none;
     
     }
-    .header-2 .navbar .active{
-        display: initial;
+    .header-2 .navbar.active{
+        display: block;
     }
 
 
